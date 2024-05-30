@@ -338,9 +338,9 @@ app.get("/api/aws/tagger/configuration/get", async (req, res) => {
 
 
 
-
 //--++ API : GENERAL : Save Configuration
-app.get("/api/aws/tagger/configuration/save", async (req, res) => {
+app.post("/api/aws/tagger/configuration/save", async (req, res) => {
+
 
     // Token Validation
     var cognitoToken = verifyTokenCognito(req.headers['x-token-cognito']);
@@ -348,10 +348,7 @@ app.get("/api/aws/tagger/configuration/save", async (req, res) => {
     if (cognitoToken.isValid === false)
         return res.status(511).send({ data: [], message : "Token is invalid"});
  
-    const params = req.query;
-    
-    console.log(params.configuration);
-    
+    var params = req.body.params;
     try {
         configurationObject.write(params.configuration)
           .then(() => {
@@ -367,8 +364,8 @@ app.get("/api/aws/tagger/configuration/save", async (req, res) => {
         res.status(401).send({});
     }
     
+    
 });
-
 
 
 //--++ API : GENERAL : Tagger Process - List log files
